@@ -3,7 +3,7 @@ import "./sequence-container.css";
 
 type SequenceContainerProps = {
   active_index: number;
-  target_keys: string[];
+  target_keys: { key: string; index: number }[];
 };
 
 const SequenceContainer = ({
@@ -19,18 +19,20 @@ const SequenceContainer = ({
   }
 
   return (
-    <div className="sequence-container container">
+    <div className="sequence container">
       {other_elements.map((x, index) => (
         <div key={index} className={`sequence-card card`}>
           {x}
         </div>
       ))}
-      {target_keys.map((x, index) => (
+      {target_keys.map((item) => (
         <div
-          key={index}
-          className={`sequence-card card ${index === active_index && "active"}`}
+          key={item.index}
+          className={`sequence-card card ${
+            item.index === active_index && "active"
+          }`}
         >
-          {x}
+          {item.key}
         </div>
       ))}
     </div>
@@ -38,3 +40,4 @@ const SequenceContainer = ({
 };
 
 export default SequenceContainer;
+

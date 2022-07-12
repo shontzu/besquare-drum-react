@@ -1,34 +1,37 @@
 import React from "react";
-import { keyConfigs } from "../../Helpers/sounds";
+import { KeyConfig, keyConfigs } from "../../Helpers/sounds";
 import "./target-container.css";
 
-const TargetContainer = () => {
-  const [activeKey, setActiveKey] = React.useState<string | undefined>();
-  const handleKeyDown = (ev: KeyboardEvent) => {
-    console.log(ev);
-    const key = ev.key;
+type TargetContainerProps = {
+  onKeyMatch: (keyConfig: KeyConfig) => void;
+};
 
-    const keyConfig = keyConfigs.find((item) => item.key === key);
-    // console.log(keyConfig);
-
-    if (keyConfig) {
-      setActiveKey(keyConfig.key);
-      const audio = new Audio(keyConfig.sound);
-      audio.play();
-
-      audio.onended = () => {
-        setActiveKey(undefined);
-      };
-    }
-  };
+const TargetContainer = ({ onKeyMatch }: TargetContainerProps) => {
+  const [activeKey, setActiveKey] = React.useState<string>();
 
   React.useEffect(() => {
+    const handleKeyDown = (ev: KeyboardEvent) => {
+      const key = ev.key;
+
+      const keyConfig = keyConfigs.find((item) => item.key === key);
+
+      if (keyConfig) {
+        onKeyMatch(keyConfig);
+        setActiveKey(keyConfig.key);
+        const audio = new Audio(keyConfig?.sound);
+        audio.play();
+        audio.onended = () => {
+          setActiveKey(undefined);
+        };
+      }
+    };
+
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [onKeyMatch]);
 
   return (
     <div className="control container">
@@ -46,3 +49,4 @@ const TargetContainer = () => {
 };
 
 export default TargetContainer;
+

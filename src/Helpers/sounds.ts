@@ -11,7 +11,7 @@ import tom from "../Assets/sounds/tom.wav";
 export type KeyConfig = {
   id: string;
   key: string;
-  sound: any;
+  sound: any | string; //can be any or string, as sound is binary file
 };
 
 export const keyConfigs: KeyConfig[] = [
